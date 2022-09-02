@@ -3,6 +3,7 @@ const axios = require("axios");
 const https = require("https");
 const { baseUrl } = require("../config");
 
+// 忽略https ssl证书配置限制
 const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 const instance = axios.create({
   // baseURL: baseUrl,
@@ -16,25 +17,26 @@ instance.defaults.headers = {
   cookie: `BIDUPSID=81301B4E55DF0F73F9A724B122F304E8; PSTM=1662012922; BAIDUID=81301B4E55DF0F73358D68A421EBF60E:FG=1; H_PS_PSSID=36553_36466_36884_37273_36570_36786_37076_37135_26350_37205; BA_HECTOR=2kag2k21al0ha0a4240lu1h21hh0jfq16; BAIDUID_BFESS=81301B4E55DF0F73358D68A421EBF60E:FG=1; ZFY=8tVUwBJhLZodpqxDX4YJBLpxjkHbcf0HWnHqOnvawWI:C`,
 };
 // tab分类
-async function getRecomment(params, request) {
+async function getRecomment(params) {
   const { tab, firstPage, pageSize, shuaxin_id, sfrom } = params;
-  let url = `${baseUrl}/tab/${tab}`;
+  let url = `${baseUrl}/tab/${tab}?_format=json`;
   if (firstPage) {
-    sfrom && (url += `?sfrom=${sfrom}`);
+    sfrom && (url += `&sfrom=${sfrom}`);
   } else {
     url = `${baseUrl}/web/video/feed?tab=${tab}&act=pcFeed&pd=pc&num=${pageSize}&shuaxin_id=${shuaxin_id}`;
   }
   const { data: html } = await instance.get(url);
 
   if (firstPage) {
-    const _ = cheerio.load(html);
-    const json = _('body #_page_data').text();
-    const start = json.indexOf("{");
-    const end = json.lastIndexOf("};");
+    // const _ = cheerio.load(html);
+    // const json = _('body #_page_data').text();
+    // const start = json.indexOf("{");
+    // const end = json.lastIndexOf("};");
     return {
-      code: 0,
-      data: JSON.parse(json.substring(start, end + 1)),
-      msg: 'success'
+      // code: 0,
+      // data: JSON.parse(json.substring(start, end + 1)),
+      ...html,
+      // msg: 'success'
     }
   } else {
     return html
@@ -42,12 +44,15 @@ async function getRecomment(params, request) {
 }
 // 视频详情
 async function detail(id) {
-  const { data: html } = await instance.get(`${baseUrl}/v?vid=${id}`);
-  const _ = cheerio.load(html);
-  const json = _('body #_page_data').text();
-  const start = json.indexOf("{");
-  const end = json.lastIndexOf("};");
-  return JSON.parse(json.substring(start, end + 1)) || null
+  const { data: html } = await instance.get(`${baseUrl}/v?vid=${id}&_format=json`);
+  return {
+    ...html
+  }
+  // const _ = cheerio.load(html);
+  // const json = _('body #_page_data').text();
+  // const start = json.indexOf("{");
+  // const end = json.lastIndexOf("};");
+  // return JSON.parse(json.substring(start, end + 1)) || null
 }
 // 作者详情
 async function author(id) {
@@ -76,6 +81,23 @@ async function searchWord({ query, type = 'video', pn = 1, rn = 10 }) {
   const { data } = await instance.get(`https://haokan.baidu.com/web/search/api?pn=${pn}&rn=${rn}&type=${type}&query=${encodeURI(query)}`);
   return data
 }
+// 榜 巨离谱 hotvideo今日热播 hotperson好看红人 newperson 好看新人 榜
+async function list({ type = 'hotperson', tab = 'zh', pageSize = 20, page = 1 }) {
+  let url = "https://haokan.hao123.com/videoui/page/pc/toplist?_format=json";
+  if (type === 'hotvideo') {
+    url += `&type=${type}&page=${page}&pageSize=${pageSize}`
+  } else {
+    url += `&tab=${tab}&type=${type}`
+  }
+  const { data: html } = await instance.get(url);
+  // const $ = cheerio.load(html);
+  // const json = $('body #_page_data').text();
+  // const start = json.indexOf('{');
+  // const end = json.lastIndexOf('};');
+  // return JSON.parse(json.substring(start, end+1)) || null
+  return html
+}
+// 新人榜
 
 module.exports = {
   getRecomment,
@@ -85,4 +107,5 @@ module.exports = {
   videolandfeed,
   hotword,
   searchWord,
+  list
 };

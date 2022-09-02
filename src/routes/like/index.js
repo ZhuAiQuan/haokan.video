@@ -6,7 +6,6 @@ like.get('/', async ctx => {
   const data = await videolandfeed();
   ctx.body = {
     ...data,
-    code: 0,
   }
 })
 

@@ -13,7 +13,7 @@ recomment.get('/', async ctx => {
   for(const key in ctx.request.query) {
     params[key] = ctx.request.query[key]
   }
-  const data = await getRecomment(params, ctx.request);
+  const data = await getRecomment(params);
   ctx.body = data
 });
 
