@@ -2,13 +2,18 @@ const Koa = require('koa');
 const parser = require('koa-bodyparser');
 const cors = require('koa-cors');
 const router = require('./routes');
+const static = require('koa-static');
+const path = require('node:path');
 
 const app = new Koa();
 app.use(parser()).use(cors());
 app.use(router.routes());
 app.use(async ctx => {
-  ctx.body = '好看视频 api解析'
+  
+  ctx.body = path.join(__dirname, '../doc/index.html')
 })
+app.use(static(path.join(__dirname, '../public')));
+
 app.on('error', (err, ctx) => {
   console.log(err, ctx)
 })

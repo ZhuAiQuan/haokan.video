@@ -18,29 +18,30 @@ instance.defaults.headers = {
 };
 // tab分类
 async function getRecomment(params) {
-  const { tab, firstPage, pageSize, shuaxin_id, sfrom } = params;
+  const { tab, pageSize, shuaxin_id } = params;
   let url = `${baseUrl}/tab/${tab}?_format=json`;
-  if (firstPage) {
-    sfrom && (url += `&sfrom=${sfrom}`);
-  } else {
+  // if (firstPage) {
+  //   sfrom && (url += `&sfrom=${sfrom}`);
+  // } else {
+  if (pageSize && shuaxin_id) {
     url = `${baseUrl}/web/video/feed?tab=${tab}&act=pcFeed&pd=pc&num=${pageSize}&shuaxin_id=${shuaxin_id}`;
   }
   const { data: html } = await instance.get(url);
 
-  if (firstPage) {
-    // const _ = cheerio.load(html);
-    // const json = _('body #_page_data').text();
-    // const start = json.indexOf("{");
-    // const end = json.lastIndexOf("};");
-    return {
-      // code: 0,
-      // data: JSON.parse(json.substring(start, end + 1)),
-      ...html,
-      // msg: 'success'
-    }
-  } else {
+  // if (firstPage) {
+  //   // const _ = cheerio.load(html);
+  //   // const json = _('body #_page_data').text();
+  //   // const start = json.indexOf("{");
+  //   // const end = json.lastIndexOf("};");
+  //   return {
+  //     // code: 0,
+  //     // data: JSON.parse(json.substring(start, end + 1)),
+  //     ...html,
+  //     // msg: 'success'
+  //   }
+  // } else {
     return html
-  }
+  // }
 }
 // 视频详情
 async function detail(id) {
