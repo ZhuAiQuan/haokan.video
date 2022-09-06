@@ -10,7 +10,7 @@ app.use(parser()).use(cors());
 app.use(router.routes());
 app.use(async ctx => {
   
-  ctx.body = path.join(__dirname, '../doc/index.html')
+  ctx.body = path.join(__dirname, '../docs/index.html')
 })
 app.use(static(path.join(__dirname, '../public')));
 
