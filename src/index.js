@@ -10,7 +10,7 @@ app.use(parser()).use(cors());
 app.use(router.routes());
 app.use(async ctx => {
   
-  ctx.body = path.join(__dirname, '../docs/index.html')
+  ctx.body = '好看视频 api解析'
 })
 app.use(static(path.join(__dirname, '../public')));
 
