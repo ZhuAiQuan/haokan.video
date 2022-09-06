@@ -1,6 +1,6 @@
 const Router = require('koa-router');
 const tv = new Router();
-const { detail } = require('../../modules')
+const { detail, tvCategory } = require('../../modules')
 
 tv.get('/', async ctx => {
   ctx.body = {
@@ -19,6 +19,12 @@ tv.post('/detail', async ctx => {
       error: '缺少剧集id'
     }
   }
+});
+
+tv.post('/category', async ctx => {
+  const { type = 0, pn = 1, rn = 20 } = ctx.request.body;
+  const data = await tvCategory(type, pn, rn);
+  ctx.body = data
 })
 
 module.exports = tv;

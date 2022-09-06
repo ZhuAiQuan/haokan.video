@@ -98,7 +98,22 @@ async function list({ type = 'hotperson', tab = 'zh', pageSize = 20, page = 1 })
   // return JSON.parse(json.substring(start, end+1)) || null
   return html
 }
-// 新人榜
+// 电视分类
+async function tvCategory(type = 0, pn = 1, rn = 20) {
+  const { data } = await instance.get(`${baseUrl}/web/video/longpage?type=${type}&pn=${pn}&rn=${rn}&_format=json`);
+  
+  if (+data.errno) {
+    return data
+  } else {
+    const { data: { response: { page_data, has_more }}, errno, errmsg } = data;
+    return {
+      page_data,
+      has_more,
+      errno,
+      errmsg
+    }
+  }
+}
 
 module.exports = {
   getRecomment,
@@ -108,5 +123,6 @@ module.exports = {
   videolandfeed,
   hotword,
   searchWord,
-  list
+  list,
+  tvCategory
 };
