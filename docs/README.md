@@ -151,6 +151,7 @@ ___
   + **gcw**: 舞蹈
 - page 页数
 - pageSize 条数 默认20条
+- period 往期id
 ___
 
 ## 搜索

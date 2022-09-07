@@ -83,12 +83,15 @@ async function searchWord({ query, type = 'video', pn = 1, rn = 10 }) {
   return data
 }
 // 榜 巨离谱 hotvideo今日热播 hotperson好看红人 newperson 好看新人 榜
-async function list({ type = 'hotperson', tab = 'zh', pageSize = 20, page = 1 }) {
+async function list({ type = 'hotperson', tab = 'zh', pageSize = 20, page = 1, period = 0 }) {
   let url = "https://haokan.hao123.com/videoui/page/pc/toplist?_format=json";
   if (type === 'hotvideo') {
     url += `&type=${type}&page=${page}&pageSize=${pageSize}`
   } else {
     url += `&tab=${tab}&type=${type}`
+  }
+  if (+period) {
+    url += `&period=${period}`
   }
   const { data: html } = await instance.get(url);
   // const $ = cheerio.load(html);

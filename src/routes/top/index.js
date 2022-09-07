@@ -14,6 +14,7 @@ top.post('/list', async ctx => {
     _format: 'json',
     page: 1,
     pageSize: 20,
+    period: 0
   };
   for(const key in ctx.request.body) {
     params[key] = ctx.request.body[key];
