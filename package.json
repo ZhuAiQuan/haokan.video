@@ -4,7 +4,8 @@
   "description": "node.js koa",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index"
+    "start": "nodemon index",
+    "docs": "docsify serve docs"
   },
   "repository": {
     "type": "git",
