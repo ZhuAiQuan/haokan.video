@@ -35,7 +35,7 @@ ___
 
 ## 推荐视频
 
-`/remomment`
+`/recomment`
 
 ### method
 `get`
